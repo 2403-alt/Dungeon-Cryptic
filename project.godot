@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Proyecto-part1"
+config/name="Dungeon Cryptic prueba"
 run/main_scene="uid://cr2jylrj17b04"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"

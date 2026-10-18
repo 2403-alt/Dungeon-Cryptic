@@ -1,29 +1,9 @@
 [gd_scene format=3 uid="uid://ct5ccdi7tf4i6"]
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_g2uqv"]
-b = Vector2(0, 648)
-
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_kpcc8"]
-b = Vector2(1152, 0)
-
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_0p0k4"]
-a = Vector2(1152, 649)
-b = Vector2(1152, 0)
-
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_5iq8r"]
-a = Vector2(1152, 648)
-b = Vector2(0, 648)
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_kpcc8"]
+normal = Vector2(0.9924502, -0.12264832)
 
 [node name="Wall" type="StaticBody2D" unique_id=1159306296]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1346565381]
-shape = SubResource("SegmentShape2D_g2uqv")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="." unique_id=1564537075]
-shape = SubResource("SegmentShape2D_kpcc8")
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="." unique_id=754548727]
-shape = SubResource("SegmentShape2D_0p0k4")
-
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="." unique_id=1668188770]
-shape = SubResource("SegmentShape2D_5iq8r")
+shape = SubResource("WorldBoundaryShape2D_kpcc8")
