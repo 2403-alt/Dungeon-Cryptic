@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://fpb1ftm2m6u4"]
+
+[ext_resource type="Script" uid="uid://bwqoma8fekb4e" path="res://scripts/orbe.gd" id="1_g7nm6"]
+[ext_resource type="Texture2D" uid="uid://ctkcb5fdedlcd" path="res://assets/pngtree-pixel-art-sci-fi-shield-orb-glowing-blue-transparent-sphere-electric-png-image_17118054.webp" id="1_sxoad"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g2uqv"]
+radius = 25.0
+
+[node name="orbe" type="Area2D" unique_id=1306222839]
+script = ExtResource("1_g7nm6")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2090570666]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_sxoad")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=417151569]
+position = Vector2(0, -2)
+shape = SubResource("CircleShape2D_g2uqv")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

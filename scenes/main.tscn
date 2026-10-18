@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://cr2jylrj17b04"]
+
+[ext_resource type="PackedScene" uid="uid://bm0618om3qp0c" path="res://scenes/level_01.tscn" id="1_0wfyh"]
+[ext_resource type="Script" uid="uid://1nmg2vflcx4f" path="res://scripts/main.gd" id="1_sugp2"]
+[ext_resource type="PackedScene" uid="uid://btovikog4ujht" path="res://scenes/player.tscn" id="2_sugp2"]
+
+[node name="Main" type="Node2D" unique_id=984352765]
+script = ExtResource("1_sugp2")
+
+[node name="Level01" parent="." unique_id=748346611 instance=ExtResource("1_0wfyh")]
+
+[node name="player" parent="." unique_id=448606944 instance=ExtResource("2_sugp2")]
+position = Vector2(63.000004, 601)
+scale = Vector2(2.5, 2.5)
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=345426557]
+
+[node name="ScoreLabel" type="Label" parent="UI" unique_id=593505368]
+offset_left = 18.0
+offset_top = 21.0
+offset_right = 110.0
+offset_bottom = 52.0
+
+[node name="WinLabel" type="Label" parent="UI" unique_id=1716875759]
+offset_left = 356.0
+offset_top = 217.00002
+offset_right = 534.0
+offset_bottom = 244.00002
+scale = Vector2(3, 3)
+
+[node name="DeadLabel" type="Label" parent="UI" unique_id=306205269]
+offset_left = 400.0
+offset_top = 221.00002
+offset_right = 516.0
+offset_bottom = 251.00002
+scale = Vector2(3, 3)
+
+[node name="HealthBar" type="CanvasLayer" parent="." unique_id=72841171]
+
+[node name="ProgressBar" type="ProgressBar" parent="HealthBar" unique_id=2053865421]
+offset_left = 19.0
+offset_top = 63.0
+offset_right = 115.0
+offset_bottom = 90.0
