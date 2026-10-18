@@ -18,13 +18,13 @@ var jumps: int = 0
 var invulnerable: bool = false
 var defeated: bool = false
 
-func _ready() -> void:
+func _ready() -> void:	
 	initial_position = position
 	add_to_group("player")
 	health = health_max
-	animation.play("walk")
-	animation.pause()
-	animation.frame = 0
+	animation.play("idle")
+	smoke_jump.visible = false
+
 	health_changed.emit(health, health_max)
 
 func damage(amount: int = 1) -> void:
@@ -46,10 +46,10 @@ func damage(amount: int = 1) -> void:
 		return
 
 	# Conserva el comportamiento actual: al recibir daño, vuelve al inicio.
-	position = initial_position
-	velocity = Vector2.ZERO
-	jumps = 0
-	animation.play("hurt")
+	#position = initial_position
+	#velocity = Vector2.ZERO
+	#jumps = 0
+	#animation.play("hurt")
 
 	await get_tree().create_timer(invulnerability_time).timeout
 	if is_inside_tree() and not defeated:
@@ -60,18 +60,26 @@ func _physics_process(delta: float) -> void:
 	if defeated:
 		return
 
+	if is_on_floor():
+		jumps = 0
+		smoke_jump.visible = false
+	elif jumps == 0:
+		jumps = 1
+	
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-	else:
-		jumps = 0
 
-	if Input.is_action_just_pressed("ui_accept") and jumps < MAX_JUMPS:
-		velocity.y = JUMP_VELOCITY
-		jumps += 1
-		if jumps == 1:
+	if Input.is_action_just_pressed("ui_accept"):
+		if is_on_floor() and jumps == 0:
+			velocity.y = JUMP_VELOCITY
+			jumps += 1
 			animation.play("jump")
-		else:
+			
+		elif not is_on_floor() and jumps == 1:
+			velocity.y = JUMP_VELOCITY
+			jumps = 2
 			animation.play("jump")
+			animation.frame = 0
 			smoke_jump.visible = true
 			smoke_jump.play("doble_jump")
 
@@ -99,14 +107,11 @@ func _update_animation() -> void:
 
 	if not is_on_floor():
 		# No reiniciar la animación en cada fotograma.
-		if animation.animation != "jump" and animation.animation != "doble_jump":
+		if animation.animation != "jump":
 			animation.play("jump")
 	elif absf(velocity.x) > 5.0:
 		if animation.animation != "run":
 			animation.play("run")
 	else:
-		# No existe animación idle en este SpriteFrames; dejamos el primer frame de walk.
-		if animation.animation != "walk":
-			animation.play("walk")
-			animation.pause()
-			animation.frame = 0
+		if animation.animation != "idle":
+			animation.play("idle")

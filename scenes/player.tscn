@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://btovikog4ujht"]
 
 [ext_resource type="Script" uid="uid://nt8ifjrw2gy" path="res://scripts/player.gd" id="1_g2els"]
-[ext_resource type="Texture2D" uid="uid://d10pyfgm48te6" path="res://assets/bro/3 Dude_Monster/Dude_Monster.png" id="2_g2els"]
-[ext_resource type="Texture2D" uid="uid://dxtmhxds7tenu" path="res://assets/bro/3 Dude_Monster/Dude_Monster_Death_8.png" id="3_smehm"]
-[ext_resource type="Texture2D" uid="uid://d8w2g4mnglu4" path="res://assets/bro/3 Dude_Monster/Double_Jump_Dust_5.png" id="4_ur7pv"]
-[ext_resource type="Texture2D" uid="uid://b3dsor0ktpngi" path="res://assets/bro/3 Dude_Monster/Dude_Monster_Hurt_4.png" id="5_y4r1p"]
-[ext_resource type="Texture2D" uid="uid://ttbxpapmn7ta" path="res://assets/bro/3 Dude_Monster/Dude_Monster_Jump_8.png" id="6_d2wvv"]
-[ext_resource type="Texture2D" uid="uid://lhc2xo0nbf8n" path="res://assets/bro/3 Dude_Monster/Dude_Monster_Run_6.png" id="7_3v2ag"]
-[ext_resource type="Texture2D" uid="uid://h7lx61qielc6" path="res://assets/bro/3 Dude_Monster/Dude_Monster_Walk_6.png" id="8_jej6c"]
+[ext_resource type="Texture2D" uid="uid://dxtmhxds7tenu" path="res://assets/characters/Dude/Dude_Monster_Death_8.png" id="3_smehm"]
+[ext_resource type="Texture2D" uid="uid://d8w2g4mnglu4" path="res://assets/characters/Dude/Double_Jump_Dust_5.png" id="4_ur7pv"]
+[ext_resource type="Texture2D" uid="uid://xm551kfbvxj6" path="res://assets/characters/Dude/Dude_Monster_Idle_4.png" id="4_y4r1p"]
+[ext_resource type="Texture2D" uid="uid://b3dsor0ktpngi" path="res://assets/characters/Dude/Dude_Monster_Hurt_4.png" id="5_y4r1p"]
+[ext_resource type="Texture2D" uid="uid://ttbxpapmn7ta" path="res://assets/characters/Dude/Dude_Monster_Jump_8.png" id="6_d2wvv"]
+[ext_resource type="Texture2D" uid="uid://lhc2xo0nbf8n" path="res://assets/characters/Dude/Dude_Monster_Run_6.png" id="7_3v2ag"]
+[ext_resource type="Texture2D" uid="uid://h7lx61qielc6" path="res://assets/characters/Dude/Dude_Monster_Walk_6.png" id="8_jej6c"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f1ej7"]
 atlas = ExtResource("3_smehm")
@@ -55,6 +55,22 @@ region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wqfne"]
 atlas = ExtResource("5_y4r1p")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jej6c"]
+atlas = ExtResource("4_y4r1p")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a38lo"]
+atlas = ExtResource("4_y4r1p")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ni07"]
+atlas = ExtResource("4_y4r1p")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l71n6"]
+atlas = ExtResource("4_y4r1p")
 region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wnwbv"]
@@ -193,6 +209,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_jej6c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a38lo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ni07")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l71n6")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_wnwbv")
 }, {
 "duration": 1.0,
@@ -218,7 +251,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"jump",
-"speed": 15.0
+"speed": 20.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -331,10 +364,6 @@ animation = &"walk"
 position = Vector2(-4.768371e-07, 8.333334)
 sprite_frames = SubResource("SpriteFrames_kpcc8")
 animation = &"doble_jump"
-
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=399191866]
-visible = false
-texture = ExtResource("2_g2els")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1951983257]
 position = Vector2(0, 2.5)
