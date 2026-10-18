@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://uryh64laot4w"
-path="res://.godot/imported/batman.png-0ce39b21903821f137d0f13bfd8b9662.ctex"
+uid="uid://dotqdxfs01qs7"
+path="res://.godot/imported/Mazmorra gótica bajo luz carmesí.png-fffdb166a8c370ae0d16cc0bdbd49590.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/batman.png"
-dest_files=["res://.godot/imported/batman.png-0ce39b21903821f137d0f13bfd8b9662.ctex"]
+source_file="res://assets/Mazmorra gótica bajo luz carmesí.png"
+dest_files=["res://.godot/imported/Mazmorra gótica bajo luz carmesí.png-fffdb166a8c370ae0d16cc0bdbd49590.ctex"]
 
 [params]
 

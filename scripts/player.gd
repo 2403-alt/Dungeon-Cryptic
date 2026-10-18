@@ -2,17 +2,17 @@ extends CharacterBody2D
 
 @onready var animation: AnimatedSprite2D = $bro
 @onready var smoke_jump = $doble_jump
+@export var invulnerability_time: float = 1.0
+@export var health_max: int = 3
 
 signal health_changed(health_current: int, health_max: int)
 signal died
 
 const SPEED: float = 300.0
-const JUMP_VELOCITY: float = -400.0
+const JUMP_VELOCITY: float = -425.0
 const MAX_JUMPS: int = 2
-@export var invulnerability_time: float = 1.0
 
 var initial_position: Vector2
-@export var health_max: int = 3
 var health: int = 3
 var jumps: int = 0
 var invulnerable: bool = false

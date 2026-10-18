@@ -1,8 +1,0 @@
-[gd_scene format=3 uid="uid://b6ckh6i3mvy22"]
-
-[ext_resource type="Texture2D" uid="uid://dq7100b1u1lfw" path="res://assets/images.jpg" id="1_kvtdr"]
-
-[node name="Platform" type="StaticBody2D" unique_id=1877375980]
-
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=571533441]
-texture = ExtResource("1_kvtdr")

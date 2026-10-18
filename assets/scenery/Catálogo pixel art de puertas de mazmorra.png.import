@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c0qtrjipbn12o"
-path="res://.godot/imported/Dungeon_brick_wall_purple.png.png-b0699bd3f65a6e5b6caa231148f72ba5.ctex"
+uid="uid://c5tik45px2anr"
+path="res://.godot/imported/Catálogo pixel art de puertas de mazmorra.png-6cdab04d36eb7a30467f267ff70fa67b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/scenery/Dungeon_brick_wall_purple.png.png"
-dest_files=["res://.godot/imported/Dungeon_brick_wall_purple.png.png-b0699bd3f65a6e5b6caa231148f72ba5.ctex"]
+source_file="res://assets/scenery/Catálogo pixel art de puertas de mazmorra.png"
+dest_files=["res://.godot/imported/Catálogo pixel art de puertas de mazmorra.png-6cdab04d36eb7a30467f267ff70fa67b.ctex"]
 
 [params]
 

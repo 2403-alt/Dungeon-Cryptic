@@ -36,7 +36,7 @@ func _on_level_winner() -> void:
 	win_label.text = "¡GANASTE!"
 	win_label.visible = true
 	game_over = true
-	_stop_enemy()
+	#_stop_enemy() --------------------------------corregir
 	player.set_physics_process(false)
 
 func _on_player_died() -> void:
@@ -45,9 +45,9 @@ func _on_player_died() -> void:
 	game_over = true
 	dead_label.text = "GAME OVER"
 	dead_label.visible = true
-	_stop_enemy()
+	#_stop_enemy() --------------------------corregir
 	print("GAME OVER")
 
-func _stop_enemy() -> void:
-	for enemy in level.get_node("enemys").get_children():
-		enemy.set_physics_process(false)
+#func _stop_enemy() -> void: -----------------------------------corregir
+	#for enemy in level.get_node("enemys").get_children():
+	#	enemy.set_physics_process(false)

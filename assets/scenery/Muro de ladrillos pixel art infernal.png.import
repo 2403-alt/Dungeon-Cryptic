@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bxtth2gpy8wc4"
-path="res://.godot/imported/Dungeon_brick_wall_grey.png.png-047ce0948a9084f0cf8d974ad723c7d8.ctex"
+uid="uid://d2pa4nvhipcoq"
+path="res://.godot/imported/Muro de ladrillos pixel art infernal.png-98871ea8aa948479d855d0d947369031.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/scenery/Dungeon_brick_wall_grey.png.png"
-dest_files=["res://.godot/imported/Dungeon_brick_wall_grey.png.png-047ce0948a9084f0cf8d974ad723c7d8.ctex"]
+source_file="res://assets/scenery/Muro de ladrillos pixel art infernal.png"
+dest_files=["res://.godot/imported/Muro de ladrillos pixel art infernal.png-98871ea8aa948479d855d0d947369031.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dq7100b1u1lfw"
-path="res://.godot/imported/images.jpg-64ec549cd063d13cdb90b2059d913e51.ctex"
+uid="uid://bwtflhe5mu0yk"
+path="res://.godot/imported/Dungeons (2).png-91925159e088aead4f1c0f91781c5f10.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images.jpg"
-dest_files=["res://.godot/imported/images.jpg-64ec549cd063d13cdb90b2059d913e51.ctex"]
+source_file="res://assets/scenery/Dungeons (2).png"
+dest_files=["res://.godot/imported/Dungeons (2).png-91925159e088aead4f1c0f91781c5f10.ctex"]
 
 [params]
 
