@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://ttbxpapmn7ta" path="res://assets/characters/Dude/Dude_Monster_Jump_8.png" id="6_d2wvv"]
 [ext_resource type="Texture2D" uid="uid://lhc2xo0nbf8n" path="res://assets/characters/Dude/Dude_Monster_Run_6.png" id="7_3v2ag"]
 [ext_resource type="Texture2D" uid="uid://h7lx61qielc6" path="res://assets/characters/Dude/Dude_Monster_Walk_6.png" id="8_jej6c"]
+[ext_resource type="Texture2D" uid="uid://b3u4g07m0h3xt" path="res://assets/characters/Dude/Attack2.png" id="8_y4r1p"]
+[ext_resource type="Texture2D" uid="uid://b1m3or2g28pd1" path="res://assets/characters/Dude/RunAttack1.png" id="9_d2wvv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f1ej7"]
 atlas = ExtResource("3_smehm")
@@ -300,6 +302,89 @@ animations = [{
 "speed": 11.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_2gdjj"]
+atlas = ExtResource("8_y4r1p")
+region = Rect2(84, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sc3ue"]
+atlas = ExtResource("8_y4r1p")
+region = Rect2(126, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lxlsd"]
+atlas = ExtResource("8_y4r1p")
+region = Rect2(168, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ha2mi"]
+atlas = ExtResource("8_y4r1p")
+region = Rect2(210, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_apa73"]
+atlas = ExtResource("9_d2wvv")
+region = Rect2(0, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_74r1k"]
+atlas = ExtResource("9_d2wvv")
+region = Rect2(42, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8svfe"]
+atlas = ExtResource("9_d2wvv")
+region = Rect2(84, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2a3c5"]
+atlas = ExtResource("9_d2wvv")
+region = Rect2(126, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_42b1b"]
+atlas = ExtResource("9_d2wvv")
+region = Rect2(168, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h7ic4"]
+atlas = ExtResource("9_d2wvv")
+region = Rect2(210, 0, 42, 42)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0p0k4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2gdjj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sc3ue")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lxlsd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ha2mi")
+}],
+"loop": 0,
+"name": &"attack",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_apa73")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_74r1k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8svfe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2a3c5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_42b1b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h7ic4")
+}],
+"loop": 0,
+"name": &"attack_walk",
+"speed": 10.0
+}]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_smehm"]
 atlas = ExtResource("4_ur7pv")
 region = Rect2(0, 0, 32, 32)
@@ -352,13 +437,24 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nr3cb"]
 size = Vector2(20, 27)
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_md484"]
+radius = 21.666666
+height = 43.333332
+
 [node name="player" type="CharacterBody2D" unique_id=448606944]
 scale = Vector2(0.6, 0.6)
 script = ExtResource("1_g2els")
 
 [node name="bro" type="AnimatedSprite2D" parent="." unique_id=276857350]
 sprite_frames = SubResource("SpriteFrames_g2uqv")
-animation = &"walk"
+animation = &"death"
+
+[node name="attack" type="AnimatedSprite2D" parent="." unique_id=2081649619]
+position = Vector2(3.3333333, -5)
+sprite_frames = SubResource("SpriteFrames_0p0k4")
+animation = &"attack_walk"
+frame = 4
+frame_progress = 1.0
 
 [node name="doble_jump" type="AnimatedSprite2D" parent="." unique_id=1934042935]
 position = Vector2(-4.768371e-07, 8.333334)
@@ -369,5 +465,18 @@ animation = &"doble_jump"
 position = Vector2(0, 2.5)
 shape = SubResource("RectangleShape2D_nr3cb")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1745362361]
+[node name="AttackArea" type="Area2D" parent="." unique_id=788430559]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=2119693394]
+position = Vector2(0, 3.3333333)
+shape = SubResource("CapsuleShape2D_md484")
+debug_color = Color(0.9923009, 0, 0.26025322, 0.41960785)
+
+[node name="Camera2D2" type="Camera2D" parent="." unique_id=216196564]
 zoom = Vector2(0.5, 0.5)
+limit_left = 0
+limit_top = -2128
+limit_right = 5011
+limit_bottom = 652
+
+[connection signal="animation_finished" from="attack" to="." method="_on_attack_animation_finished"]

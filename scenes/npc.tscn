@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://dao02orox2t1l"]
+
+[ext_resource type="Script" uid="uid://672vue6anwtf" path="res://scripts/npc.gd" id="1_abqhh"]
+[ext_resource type="Texture2D" uid="uid://cl35m8mmkwdae" path="res://assets/characters/NPC/Owlet_Monster_Idle_4.png" id="2_rv78h"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7n8xq"]
+atlas = ExtResource("2_rv78h")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4wlns"]
+atlas = ExtResource("2_rv78h")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tl2vt"]
+atlas = ExtResource("2_rv78h")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hwkja"]
+atlas = ExtResource("2_rv78h")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_g2uqv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7n8xq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4wlns")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tl2vt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hwkja")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 8.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kpcc8"]
+radius = 14.0
+height = 38.0
+
+[node name="NPC" type="Node2D" unique_id=522034506]
+script = ExtResource("1_abqhh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1198466729]
+sprite_frames = SubResource("SpriteFrames_g2uqv")
+animation = &"idle"
+
+[node name="InteractiveArea" type="Area2D" parent="." unique_id=593924252]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractiveArea" unique_id=392589397]
+position = Vector2(-2, 2)
+shape = SubResource("CapsuleShape2D_kpcc8")

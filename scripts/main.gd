@@ -10,18 +10,23 @@ var game_over: bool = false
 @onready var health_bar: ProgressBar = $HealthBar/ProgressBar
 
 func _ready() -> void:
-	score_label.text = "Puntos: 0"
+	score_label.text = "Point: %d" % level.score
 	win_label.visible = false
 	dead_label.visible = false
 
 	health_bar.min_value = 0
-	health_bar.max_value = 3
-	health_bar.value = 3
+	health_bar.max_value = player.health_max
+	health_bar.value = player.health
 
 	player.health_changed.connect(_on_player_health_changed)
 	player.died.connect(_on_player_died)
-	level.orbe_collected.connect(_on_orbe_collected)
+	level.score_changed.connect(_on_score_changed)
 	level.winner.connect(_on_level_winner)
+
+	SaveManager.apply_save_data(player)
+
+func _on_score_changed(new_score: int) -> void:
+	score_label.text = "Point: %d" % new_score
 
 func _on_player_health_changed(health_current: int, health_max: int) -> void:
 	health_bar.max_value = health_max
@@ -51,3 +56,9 @@ func _on_player_died() -> void:
 #func _stop_enemy() -> void: -----------------------------------corregir
 	#for enemy in level.get_node("enemys").get_children():
 	#	enemy.set_physics_process(false)
+	
+func _on_save_buttom_pressed() -> void:
+	SaveManager.save_game($player, get_tree().current_scene.scene_file_path)
+	pass # Replace with function body.
+func _on_load_button_pressed() -> void:
+	SaveManager.load_game()

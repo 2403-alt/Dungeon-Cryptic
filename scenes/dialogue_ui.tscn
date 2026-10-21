@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://b7s5so5ol66g2"]
+
+[ext_resource type="Script" uid="uid://vl7ifxly0lha" path="res://scripts/dialogue_ui.gd" id="1_6q285"]
+[ext_resource type="Texture2D" uid="uid://bjpci8u3r683w" path="res://assets/ui/pngwing.com(2).png" id="2_jx1sv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g2uqv"]
+atlas = ExtResource("2_jx1sv")
+region = Rect2(206.82904, 515.26465, 1290.3958, 393.9452)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0p0k4"]
+draw_center = false
+
+[node name="dialogue_ui" type="CanvasLayer" unique_id=1657432286]
+script = ExtResource("1_6q285")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=831007384]
+position = Vector2(573.99994, 542.375)
+scale = Vector2(0.5953488, 0.4153944)
+texture = SubResource("AtlasTexture_g2uqv")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1931609245]
+offset_left = 220.0
+offset_top = 520.0
+offset_right = 920.0
+offset_bottom = 605.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_0p0k4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=961507345]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="PanelContainer/VBoxContainer" unique_id=2030306265]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(199, -52)
+offset_transform_scale = Vector2(1.5, 1.5)
+text = "Mr. Snow"
+
+[node name="DialogueLabel" type="Label" parent="PanelContainer/VBoxContainer" unique_id=1760024372]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -16)
+text = "44444444444444444444444444444444444444444444444444444444444
+44444444444444444444444"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ContinueButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1441263620]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_scale = Vector2(0.5, 0.5)

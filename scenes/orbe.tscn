@@ -18,3 +18,4 @@ position = Vector2(0, -2)
 shape = SubResource("CircleShape2D_g2uqv")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="collected" from="." to="." method="_on_collected"]
