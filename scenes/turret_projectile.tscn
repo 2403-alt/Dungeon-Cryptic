@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://dvoahoitr8a6e"]
+
+[ext_resource type="Texture2D" uid="uid://bhqcgi226al6k" path="res://assets/characters/torreta/Hoja de sprites de torreta góticaಿಷ್ಠ.png" id="1_1vc1r"]
+[ext_resource type="Script" uid="uid://dlw3wr42lj6qk" path="res://scripts/turret_projectile.gd" id="1_thpf4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0p0k4"]
+atlas = ExtResource("1_1vc1r")
+region = Rect2(1152, 680, 32, 72)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5iq8r"]
+radius = 17.0
+height = 60.0
+
+[node name="TurretProjectile" type="Area2D" unique_id=867173015]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_thpf4")
+speed = 350.0
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=368834159]
+texture = SubResource("AtlasTexture_0p0k4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1585409180]
+shape = SubResource("CapsuleShape2D_5iq8r")

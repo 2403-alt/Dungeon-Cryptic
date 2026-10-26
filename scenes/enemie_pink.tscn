@@ -1,0 +1,731 @@
+[gd_scene format=3 uid="uid://c5hg32iks5brn"]
+
+[ext_resource type="Texture2D" uid="uid://bgqclb00saum0" path="res://assets/characters/Monster/Pink_Monster_Walk_6.png" id="1_eyo8p"]
+[ext_resource type="Texture2D" uid="uid://bhgbq4ois2po0" path="res://assets/characters/Monster/Pink_Monster_Jump_8.png" id="2_u8cdv"]
+[ext_resource type="Texture2D" uid="uid://dngfs6il10lhs" path="res://assets/characters/Monster/Pink_Monster_Idle_4.png" id="3_wgg11"]
+[ext_resource type="Texture2D" uid="uid://dh0o0oa51if55" path="res://assets/characters/Monster/Pink_Monster_Attack1_4.png" id="4_7sg1g"]
+[ext_resource type="Texture2D" uid="uid://dbkuvm5ocvfe4" path="res://assets/characters/Monster/Pink_Monster_Attack2_6.png" id="5_nel6o"]
+[ext_resource type="Texture2D" uid="uid://dojchyrgmhdh8" path="res://assets/characters/Monster/Pink_Monster_Walk+Attack_6.png" id="6_qjbnh"]
+[ext_resource type="Texture2D" uid="uid://q2q0xgpxlahy" path="res://assets/characters/Monster/Pink_Monster_Death_8.png" id="7_wajmu"]
+
+[sub_resource type="GDScript" id="GDScript_eyo8p"]
+script/source = "extends CharacterBody2D
+
+@export_group(\"Movimiento\")
+@export var velocidad_patrulla: float = 65.0
+@export var velocidad_persecucion: float = 110.0
+@export var distancia_patrulla: float = 130.0
+@export var gravedad: float = 980.0
+@export var fuerza_salto: float = -320.0
+@export var intervalo_salto: float = 1.8
+@export var saltar_patrullando: bool = true
+
+@export_group(\"Deteccion y combate\")
+@export var rango_vision: float = 230.0
+@export var altura_vision: float = 110.0
+@export var distancia_ataque: float = 34.0
+@export var altura_ataque: float = 38.0
+@export var dano: int = 1
+@export var intervalo_ataque: float = 1.3
+@export var vida_maxima: int = 3
+
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var barra: ProgressBar = $HealthBar
+@onready var punto_a: Marker2D = $PositionPatrolA
+@onready var punto_b: Marker2D = $PositionPatrolB
+@onready var colision: CollisionShape2D = $CollisionShape2D
+
+var vida: int = 3
+var muerto: bool = false
+var atacando: bool = false
+var direccion: int = 1
+var origen_x: float = 0.0
+var objetivo: CharacterBody2D = null
+var reloj_salto: float = 0.0
+var reloj_ataque: float = 0.0
+var indice_ataque: int = 0
+var limite_izquierdo: float = 0.0
+var limite_derecho: float = 0.0
+var direction: Vector2 = Vector2.ZERO
+
+
+func _ready() -> void:
+	vida = vida_maxima
+	origen_x = global_position.x
+
+	limite_izquierdo = origen_x - distancia_patrulla
+	limite_derecho = origen_x + distancia_patrulla
+
+	if not is_zero_approx(punto_a.position.x - punto_b.position.x):
+		limite_izquierdo = min(
+			punto_a.global_position.x,
+			punto_b.global_position.x
+		)
+		limite_derecho = max(
+			punto_a.global_position.x,
+			punto_b.global_position.x
+		)
+
+	barra.max_value = vida_maxima
+	barra.value = vida
+	barra.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	_animar(&\"idle\")
+
+
+func _physics_process(delta: float) -> void:
+	if muerto:
+		return
+
+	if not is_on_floor():
+		velocity.y += gravedad * delta
+
+	reloj_salto += delta
+	reloj_ataque = maxf(0.0, reloj_ataque - delta)
+
+	_buscar_jugador()
+
+	if atacando:
+		velocity.x = 0.0
+	elif objetivo != null:
+		_perseguir()
+	else:
+		_patrullar()
+
+	move_and_slide()
+
+	if not atacando:
+		if not is_on_floor():
+			_animar(&\"jump\")
+		elif absf(velocity.x) > 1.0:
+			_animar(&\"walk\")
+		else:
+			_animar(&\"idle\")
+
+
+func _buscar_jugador() -> void:
+	objetivo = null
+
+	for nodo in get_tree().get_nodes_in_group(\"player\"):
+		if not nodo is CharacterBody2D:
+			continue
+
+		if nodo.get(\"defeated\") == true:
+			continue
+
+		var dx: float = absf(
+			nodo.global_position.x - global_position.x
+		)
+		var dy: float = absf(
+			nodo.global_position.y - global_position.y
+		)
+
+		if dx <= rango_vision and dy <= altura_vision:
+			objetivo = nodo
+			return
+
+
+func _patrullar() -> void:
+	if global_position.x >= limite_derecho:
+		direccion = -1
+
+	# Cambiar de direccion al llegar al limite izquierdo
+	elif global_position.x <= limite_izquierdo:
+		direccion = 1
+
+	# Cambiar la orientacion del enemigo
+	_orientar()
+
+	# Caminar sin saltar
+	velocity.x = direccion * velocidad_patrulla
+
+	# Mantener al enemigo en el suelo
+	# No se llama a la funcion _saltar()
+
+
+func _perseguir() -> void:
+	if not is_instance_valid(objetivo):
+		objetivo = null
+		return
+
+	var dx: float = (
+		objetivo.global_position.x - global_position.x
+	)
+	var dy: float = (
+		objetivo.global_position.y - global_position.y
+	)
+
+	if absf(dx) > 4.0:
+		direccion = 1 if dx > 0.0 else -1
+
+	_orientar()
+
+	if _esta_en_rango_ataque(objetivo):
+		velocity.x = 0.0
+
+		if reloj_ataque <= 0.0:
+			_atacar()
+
+		return
+
+	velocity.x = direccion * velocidad_persecucion
+
+	if _puede_saltar() and (
+		is_on_wall() or dy < -30.0
+	):
+		_saltar()
+
+
+func _puede_saltar() -> bool:
+	return (
+		is_on_floor()
+		and reloj_salto >= intervalo_salto
+		and not atacando
+	)
+
+
+func _saltar() -> void:
+	velocity.y = fuerza_salto
+	reloj_salto = 0.0
+	_animar(&\"jump\")
+
+
+func _esta_en_rango_ataque(cuerpo: Node2D) -> bool:
+	return (
+		absf(cuerpo.global_position.x - global_position.x)
+		<= distancia_ataque
+		and
+		absf(cuerpo.global_position.y - global_position.y)
+		<= altura_ataque
+	)
+
+
+
+
+
+
+func _atacar() -> void:
+	if muerto or atacando or not is_instance_valid(objetivo):
+		return
+
+	if objetivo.defeated:
+		return
+
+	atacando = true
+	reloj_ataque = intervalo_ataque
+	velocity.x = 0.0
+
+	var jugador_atacado: CharacterBody2D = objetivo
+
+	# Elegir el ataque
+	var ataque: StringName = &\"attack_1\"
+
+	if indice_ataque % 2 == 1:
+		ataque = &\"attack_2\"
+
+	indice_ataque += 1
+
+	# Girar hacia el jugador antes de atacar
+	if jugador_atacado.global_position.x > global_position.x:
+		direccion = 1
+	else:
+		direccion = -1
+
+	_orientar()
+
+	# Reproducir la animacion
+	_animar(ataque)
+
+	# Esperar el momento del golpe
+	await get_tree().create_timer(0.3).timeout
+
+	if muerto or not is_inside_tree():
+		return
+
+	# Comprobar si el jugador sigue vivo y cerca
+	if is_instance_valid(jugador_atacado):
+		if not jugador_atacado.defeated:
+
+			# Girar nuevamente si el jugador cambio de lado
+			if jugador_atacado.global_position.x > global_position.x:
+				direccion = 1
+			else:
+				direccion = -1
+
+			_orientar()
+
+			if _esta_en_rango_ataque(jugador_atacado):
+				jugador_atacado.damage(dano)
+
+	# Esperar a que termine el ataque
+	await get_tree().create_timer(0.4).timeout
+
+	if muerto or not is_inside_tree():
+		return
+
+	atacando = false
+	
+func damage(cantidad: int = 1) -> void:
+	if muerto:
+		return
+
+	vida = maxi(0, vida - cantidad)
+	barra.value = vida
+
+	if vida == 0:
+		morir()
+
+
+func morir() -> void:
+	if muerto:
+		return
+
+	muerto = true
+	atacando = false
+	objetivo = null
+
+	velocity = Vector2.ZERO
+
+	set_physics_process(false)
+	colision.set_deferred(\"disabled\", true)
+
+	_animar(&\"death\")
+
+	if sprite.sprite_frames.has_animation(&\"death\"):
+		var frames: int = (
+			sprite.sprite_frames.get_frame_count(&\"death\")
+		)
+		var fps: float = (
+			sprite.sprite_frames.get_animation_speed(&\"death\")
+		)
+
+		if fps > 0.0:
+			await get_tree().create_timer(
+				float(frames) / fps
+			).timeout
+
+	if is_inside_tree():
+		queue_free()
+
+
+
+func _orientar() -> void:
+	if is_instance_valid(objetivo):
+		# Calcular la direccion hacia el jugador
+		direction = (
+			objetivo.global_position - global_position
+		).normalized()
+
+		# Actualizar la direccion horizontal
+		if direction.x > 0:
+			direccion = 1
+		elif direction.x < 0:
+			direccion = -1
+
+	# Girar el sprite hacia el jugador
+	sprite.flip_h = direccion < 0
+
+
+func _animar(nombre: StringName) -> void:
+	if not sprite.sprite_frames.has_animation(nombre):
+		return
+
+	if sprite.animation != nombre or not sprite.is_playing():
+		sprite.play(nombre)
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u8cdv"]
+atlas = ExtResource("4_7sg1g")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wgg11"]
+atlas = ExtResource("4_7sg1g")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7sg1g"]
+atlas = ExtResource("4_7sg1g")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nel6o"]
+atlas = ExtResource("4_7sg1g")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qjbnh"]
+atlas = ExtResource("5_nel6o")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wajmu"]
+atlas = ExtResource("5_nel6o")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y0tau"]
+atlas = ExtResource("5_nel6o")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5cq5f"]
+atlas = ExtResource("5_nel6o")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6h3am"]
+atlas = ExtResource("5_nel6o")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i4pkc"]
+atlas = ExtResource("5_nel6o")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_81pkd"]
+atlas = ExtResource("7_wajmu")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ljkyd"]
+atlas = ExtResource("7_wajmu")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kwtnb"]
+atlas = ExtResource("7_wajmu")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rcsap"]
+atlas = ExtResource("7_wajmu")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pv8xj"]
+atlas = ExtResource("7_wajmu")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_spekv"]
+atlas = ExtResource("7_wajmu")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wp34k"]
+atlas = ExtResource("7_wajmu")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mc2w3"]
+atlas = ExtResource("7_wajmu")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3odkk"]
+atlas = ExtResource("3_wgg11")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ep6ex"]
+atlas = ExtResource("3_wgg11")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aydtk"]
+atlas = ExtResource("3_wgg11")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_37t2n"]
+atlas = ExtResource("3_wgg11")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d2a01"]
+atlas = ExtResource("2_u8cdv")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iap3s"]
+atlas = ExtResource("2_u8cdv")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wma0c"]
+atlas = ExtResource("2_u8cdv")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7sp84"]
+atlas = ExtResource("2_u8cdv")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_avxj4"]
+atlas = ExtResource("2_u8cdv")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4i7at"]
+atlas = ExtResource("2_u8cdv")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kpdl6"]
+atlas = ExtResource("2_u8cdv")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8c35f"]
+atlas = ExtResource("2_u8cdv")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jwddo"]
+atlas = ExtResource("1_eyo8p")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d5yxm"]
+atlas = ExtResource("1_eyo8p")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ere67"]
+atlas = ExtResource("1_eyo8p")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uuaqx"]
+atlas = ExtResource("1_eyo8p")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lfihs"]
+atlas = ExtResource("1_eyo8p")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gamsi"]
+atlas = ExtResource("1_eyo8p")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a6i17"]
+atlas = ExtResource("6_qjbnh")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6wutf"]
+atlas = ExtResource("6_qjbnh")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xm5a1"]
+atlas = ExtResource("6_qjbnh")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m1c83"]
+atlas = ExtResource("6_qjbnh")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vjbbp"]
+atlas = ExtResource("6_qjbnh")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p0265"]
+atlas = ExtResource("6_qjbnh")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4gjru"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u8cdv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wgg11")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7sg1g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nel6o")
+}],
+"loop": true,
+"name": &"attack_1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qjbnh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wajmu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y0tau")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5cq5f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6h3am")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i4pkc")
+}],
+"loop": true,
+"name": &"attack_2",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_81pkd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ljkyd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kwtnb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rcsap")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pv8xj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_spekv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wp34k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mc2w3")
+}],
+"loop": true,
+"name": &"death",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3odkk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ep6ex")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aydtk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_37t2n")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d2a01")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iap3s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wma0c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7sp84")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_avxj4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4i7at")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kpdl6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8c35f")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jwddo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d5yxm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ere67")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uuaqx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lfihs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gamsi")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a6i17")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6wutf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xm5a1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m1c83")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vjbbp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p0265")
+}],
+"loop": true,
+"name": &"walkAttack",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4gjru"]
+radius = 36.0
+height = 96.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4gjru"]
+radius = 184.02446
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hajqt"]
+radius = 84.0238
+
+[node name="EnemiePink" type="CharacterBody2D" unique_id=1297545982]
+script = SubResource("GDScript_eyo8p")
+velocidad_patrulla = null
+velocidad_persecucion = null
+distancia_patrulla = null
+gravedad = null
+fuerza_salto = null
+intervalo_salto = null
+saltar_patrullando = null
+rango_vision = null
+altura_vision = null
+distancia_ataque = null
+altura_ataque = null
+dano = null
+intervalo_ataque = null
+vida_maxima = null
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1015602975]
+position = Vector2(41.499992, 31.499996)
+scale = Vector2(3.5937498, 3.21875)
+sprite_frames = SubResource("SpriteFrames_4gjru")
+animation = &"attack_1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=801962097]
+position = Vector2(39, 35)
+shape = SubResource("CapsuleShape2D_4gjru")
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=713262068]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1242928925]
+position = Vector2(42, 33)
+shape = SubResource("CircleShape2D_4gjru")
+
+[node name="AreaAttack" type="Area2D" parent="." unique_id=502397145]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaAttack" unique_id=1078777286]
+position = Vector2(41, 38)
+shape = SubResource("CircleShape2D_hajqt")
+debug_color = Color(0.9764706, 0, 0.023529412, 0.41960785)
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=458603870]
+
+[node name="PositionPatrolA" type="Marker2D" parent="." unique_id=850259629]
+visible = false
+
+[node name="PositionPatrolB" type="Marker2D" parent="." unique_id=339278037]
+visible = false
+
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=1973103625]
+offset_left = -20.0
+offset_top = -43.0
+offset_right = 93.0
+offset_bottom = -16.0

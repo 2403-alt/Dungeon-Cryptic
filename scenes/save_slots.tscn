@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://bc7n0dlwxuo7l"]
+
+[ext_resource type="Script" uid="uid://cmgbkca3giekf" path="res://scripts/save_slots.gd" id="1_x2vf8"]
+
+[node name="SaveSlots" type="Control" unique_id=2046099463]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_x2vf8")
+
+[node name="Overlay" type="ColorRect" parent="." unique_id=239292821]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7019608)
+
+[node name="CenterContainer" type="CenterContainer" parent="Overlay" unique_id=123889529]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Overlay/CenterContainer" unique_id=1936992972]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer" unique_id=51477926]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=67276386]
+layout_mode = 2
+text = "GUARDAR PARTIDA"
+horizontal_alignment = 1
+
+[node name="SaveList" type="ItemList" parent="Overlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=985113677]
+custom_minimum_size = Vector2(440, 220)
+layout_mode = 2
+
+[node name="NewSaveButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=2029212550]
+layout_mode = 2
+text = "GUARDAR NUEVA PARTIDA"
+
+[node name="ConfirmButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=788758983]
+layout_mode = 2
+text = "SOBREESCRIBIR LA PARTIDA"
+
+[node name="CancelButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=1056373896]
+layout_mode = 2
+text = "SALIR"

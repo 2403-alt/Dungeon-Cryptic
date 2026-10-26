@@ -11,7 +11,7 @@ enum QuestState {
 }
 
 var quest_state: QuestState = QuestState.NOT_STARTED
-var required_crystals: int = 6
+var required_crystals: int = 8
 var collected_crystals: int = 0
 
 func start_quest() -> void:

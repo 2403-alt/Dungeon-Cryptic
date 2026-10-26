@@ -69,7 +69,8 @@ func interact() -> void:
 				[
 					"You found all the orbs!",
 					"Thank you for recovering all of them.",
-					"The mission is complete. Now we can activate the portal!"
+					"The mission is complete. Take this key.",
+					"Now you can go to the next room through the door at the end."
 				]
 			)
 			QuestManager.complete_quest()
@@ -79,7 +80,7 @@ func interact() -> void:
 				"Mr. Snow",
 				[
 					"Thank you for your help!",
-					"The portal is ready to use.",
+					"You can now enter through the door.",
 					"Have a good trip!"
 				]
 			)

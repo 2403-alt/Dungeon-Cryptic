@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://ci30a2wx64i8y"]
+
+[ext_resource type="Texture2D" uid="uid://drqg555s3adxy" path="res://assets/characters/Dude/Rock2.png" id="1_hmdus"]
+[ext_resource type="Script" uid="uid://cd0p8coj4y1a8" path="res://scripts/stone.gd" id="1_tuldt"]
+[ext_resource type="PackedScene" uid="uid://b2gnf5roye73u" path="res://scenes/impact_effect.tscn" id="3_f651v"]
+[ext_resource type="AudioStream" uid="uid://dh2ogn4wvkhsu" path="res://sounds/impacto.mp3" id="4_6niw0"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g2uqv"]
+radius = 7.0
+
+[node name="Stone" type="Area2D" unique_id=1487144882]
+scale = Vector2(1.5, 1.5)
+script = ExtResource("1_tuldt")
+impact_scene = ExtResource("3_f651v")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1719998933]
+texture = ExtResource("1_hmdus")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=603249139]
+shape = SubResource("CircleShape2D_g2uqv")
+
+[node name="ImpactSound" type="AudioStreamPlayer2D" parent="." unique_id=1068852998]
+stream = ExtResource("4_6niw0")

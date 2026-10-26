@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://s5xe6pifstu7"]
+
+[ext_resource type="Script" uid="uid://1w34k2alhsk" path="res://scripts/door.gd" id="1_uvdjg"]
+[ext_resource type="Texture2D" uid="uid://c5tik45px2anr" path="res://assets/scenery/Catálogo pixel art de puertas de mazmorra.png" id="2_83dcw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yn7he"]
+atlas = ExtResource("2_83dcw")
+region = Rect2(752, 400, 232, 240)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f31ic"]
+size = Vector2(223, 233.5)
+
+[node name="Door" type="Area2D" unique_id=407939368]
+script = ExtResource("1_uvdjg")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2042178188]
+texture = SubResource("AtlasTexture_yn7he")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1312324663]
+position = Vector2(0.5, 0.75)
+shape = SubResource("RectangleShape2D_f31ic")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

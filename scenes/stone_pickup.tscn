@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://dan68mbts6d2y"]
+
+[ext_resource type="Texture2D" uid="uid://bsp6y08ngr44c" path="res://assets/bro/3 Dude_Monster/Rock1.png" id="1_5iy05"]
+[ext_resource type="Script" uid="uid://3dywt3cq13b2" path="res://scripts/stone_pickup.gd" id="1_ok8eb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g2uqv"]
+radius = 12.0415945
+
+[node name="StonePickup" type="Area2D" unique_id=161268194]
+scale = Vector2(1.5, 1.5)
+script = ExtResource("1_ok8eb")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1884685933]
+position = Vector2(3, -6)
+texture = ExtResource("1_5iy05")
+
+[node name="Sprite2D3" type="Sprite2D" parent="." unique_id=1128992031]
+position = Vector2(6, -1)
+texture = ExtResource("1_5iy05")
+
+[node name="Sprite2D4" type="Sprite2D" parent="." unique_id=94781049]
+position = Vector2(-4, -4)
+texture = ExtResource("1_5iy05")
+
+[node name="Sprite2D5" type="Sprite2D" parent="." unique_id=1306752852]
+position = Vector2(-7, -1)
+texture = ExtResource("1_5iy05")
+
+[node name="Sprite2D6" type="Sprite2D" parent="." unique_id=373038606]
+texture = ExtResource("1_5iy05")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1722189358]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_g2uqv")

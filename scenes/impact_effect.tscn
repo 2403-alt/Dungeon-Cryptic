@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://b2gnf5roye73u"]
+
+[ext_resource type="Script" uid="uid://dmekylbkfuy23" path="res://scripts/impact_effect.gd" id="1_3p2ax"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ungqy"]
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 180.0
+initial_velocity_min = 60.05
+initial_velocity_max = 120.0
+gravity = Vector3(0, 250, 0)
+scale_min = 1.5
+scale_max = 2.5
+
+[node name="ImpactEffect" type="GPUParticles2D" unique_id=28718937]
+emitting = false
+amount = 12
+lifetime = 0.35000000000000003
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_ungqy")
+script = ExtResource("1_3p2ax")

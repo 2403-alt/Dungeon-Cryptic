@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://btovikog4ujht"]
 
 [ext_resource type="Script" uid="uid://nt8ifjrw2gy" path="res://scripts/player.gd" id="1_g2els"]
+[ext_resource type="PackedScene" uid="uid://ci30a2wx64i8y" path="res://scenes/stone.tscn" id="2_a8ls1"]
 [ext_resource type="Texture2D" uid="uid://dxtmhxds7tenu" path="res://assets/characters/Dude/Dude_Monster_Death_8.png" id="3_smehm"]
 [ext_resource type="Texture2D" uid="uid://d8w2g4mnglu4" path="res://assets/characters/Dude/Double_Jump_Dust_5.png" id="4_ur7pv"]
 [ext_resource type="Texture2D" uid="uid://xm551kfbvxj6" path="res://assets/characters/Dude/Dude_Monster_Idle_4.png" id="4_y4r1p"]
@@ -10,6 +11,13 @@
 [ext_resource type="Texture2D" uid="uid://h7lx61qielc6" path="res://assets/characters/Dude/Dude_Monster_Walk_6.png" id="8_jej6c"]
 [ext_resource type="Texture2D" uid="uid://b3u4g07m0h3xt" path="res://assets/characters/Dude/Attack2.png" id="8_y4r1p"]
 [ext_resource type="Texture2D" uid="uid://b1m3or2g28pd1" path="res://assets/characters/Dude/RunAttack1.png" id="9_d2wvv"]
+[ext_resource type="Texture2D" uid="uid://bees5kx52s0hn" path="res://assets/bro/3 Dude_Monster/Dude_Monster_Throw_4.png" id="10_qfm1y"]
+[ext_resource type="AudioStream" uid="uid://dgdq8qiwlgjme" path="res://sounds/attack.mp3" id="11_f1ej7"]
+[ext_resource type="AudioStream" uid="uid://bci83dm4cvcsq" path="res://sounds/collected.mp3" id="12_oprun"]
+[ext_resource type="AudioStream" uid="uid://bsc1q1m12ou2" path="res://sounds/damage.mp3" id="13_a8ls1"]
+[ext_resource type="AudioStream" uid="uid://d2na7gfv7x8ms" path="res://sounds/jump.mp3" id="14_qfm1y"]
+[ext_resource type="AudioStream" uid="uid://bpq3x4uaerilr" path="res://sounds/doublejump.mp3" id="15_oprun"]
+[ext_resource type="AudioStream" uid="uid://ts5jquybljx2" path="res://sounds/lanzamiento.mp3" id="18_fulsm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f1ej7"]
 atlas = ExtResource("3_smehm")
@@ -205,7 +213,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_wqfne")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"hurt",
 "speed": 5.0
 }, {
@@ -434,6 +442,42 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ke2ow"]
+atlas = ExtResource("10_qfm1y")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ujl30"]
+atlas = ExtResource("10_qfm1y")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_au7lq"]
+atlas = ExtResource("10_qfm1y")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nubpm"]
+atlas = ExtResource("10_qfm1y")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5iq8r"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ke2ow")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ujl30")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_au7lq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nubpm")
+}],
+"loop": 0,
+"name": &"attack_throw",
+"speed": 14.0
+}]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nr3cb"]
 size = Vector2(20, 27)
 
@@ -444,22 +488,28 @@ height = 43.333332
 [node name="player" type="CharacterBody2D" unique_id=448606944]
 scale = Vector2(0.6, 0.6)
 script = ExtResource("1_g2els")
+stone_scene = ExtResource("2_a8ls1")
 
 [node name="bro" type="AnimatedSprite2D" parent="." unique_id=276857350]
 sprite_frames = SubResource("SpriteFrames_g2uqv")
-animation = &"death"
+animation = &"walk"
 
 [node name="attack" type="AnimatedSprite2D" parent="." unique_id=2081649619]
 position = Vector2(3.3333333, -5)
 sprite_frames = SubResource("SpriteFrames_0p0k4")
-animation = &"attack_walk"
-frame = 4
-frame_progress = 1.0
+animation = &"attack"
 
 [node name="doble_jump" type="AnimatedSprite2D" parent="." unique_id=1934042935]
 position = Vector2(-4.768371e-07, 8.333334)
 sprite_frames = SubResource("SpriteFrames_kpcc8")
 animation = &"doble_jump"
+
+[node name="ThrowAnimation" type="AnimatedSprite2D" parent="." unique_id=888189008]
+position = Vector2(-1.6666666, 0)
+sprite_frames = SubResource("SpriteFrames_5iq8r")
+animation = &"attack_throw"
+frame = 3
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1951983257]
 position = Vector2(0, 2.5)
@@ -478,5 +528,25 @@ limit_left = 0
 limit_top = -2128
 limit_right = 5011
 limit_bottom = 652
+
+[node name="AttackSound" type="AudioStreamPlayer" parent="." unique_id=1926407011]
+stream = ExtResource("11_f1ej7")
+
+[node name="CollectedSound" type="AudioStreamPlayer" parent="." unique_id=1959512464]
+stream = ExtResource("12_oprun")
+
+[node name="DamageSound" type="AudioStreamPlayer" parent="." unique_id=1751849434]
+stream = ExtResource("13_a8ls1")
+
+[node name="JumpSound" type="AudioStreamPlayer" parent="." unique_id=241472475]
+stream = ExtResource("14_qfm1y")
+
+[node name="DobleJumpSound" type="AudioStreamPlayer" parent="." unique_id=1947891084]
+stream = ExtResource("15_oprun")
+pitch_scale = 1.88
+
+[node name="ThrowSound" type="AudioStreamPlayer" parent="." unique_id=180948273]
+stream = ExtResource("18_fulsm")
+pitch_scale = 4.0
 
 [connection signal="animation_finished" from="attack" to="." method="_on_attack_animation_finished"]

@@ -18,6 +18,8 @@ func _ready() -> void:
 			coin.collected.connect(_on_orbe_collected.bind(coin))
 
 	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if not is_ancestor_of(enemy):
+			continue
 		if enemy.has_signal("killed"):
 			enemy.killed.connect(_on_enemy_killed.bind(enemy))
 
@@ -40,12 +42,20 @@ func _on_orbe_collected(coin: Node2D) -> void:
 	if not QuestManager.collect_crystal():
 		return
 
+	_play_collection_sound()
+
 	var orb_id: String = str(coin.name)
 	if not collected_orb_ids.has(orb_id):
 		collected_orb_ids.append(orb_id)
 
 	score_add(10)
 	orbe_collected.emit()
+
+
+func _play_collection_sound() -> void:
+	var player = get_tree().current_scene.get_node_or_null("player")
+	if player != null and player.has_method("collect_orbe"):
+		player.collect_orbe()
 
 
 func score_add(points: int) -> void:
@@ -65,7 +75,7 @@ func get_save_data() -> Dictionary:
 	var enemy_data: Dictionary = {}
 
 	for enemy in get_tree().get_nodes_in_group("enemies"):
-		if not is_instance_valid(enemy):
+		if not is_instance_valid(enemy) or not is_ancestor_of(enemy):
 			continue
 
 		enemy_data[str(enemy.name)] = {
@@ -100,6 +110,8 @@ func apply_save_data(data: Dictionary) -> void:
 			coin.queue_free()
 
 	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if not is_ancestor_of(enemy):
+			continue
 		var enemy_id: String = str(enemy.name)
 
 		if killed_enemy_ids.has(enemy_id):

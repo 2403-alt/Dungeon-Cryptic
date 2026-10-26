@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://c2ftrtskpar25"]
+
+[ext_resource type="Script" uid="uid://o7q5fd8yg2ci" path="res://scripts/ceiling_turret.gd" id="1_xifu6"]
+[ext_resource type="PackedScene" uid="uid://dvoahoitr8a6e" path="res://scenes/turret_projectile.tscn" id="2_fxen7"]
+[ext_resource type="Texture2D" uid="uid://bw4djbgbgc2fr" path="res://assets/characters/torreta/Guía pixel art_ torreta modular en Godot.png" id="3_0jtas"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g2uqv"]
+atlas = ExtResource("3_0jtas")
+region = Rect2(1000, 104, 272, 136)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g2uqv"]
+size = Vector2(1743, 1065.25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kpcc8"]
+atlas = ExtResource("3_0jtas")
+region = Rect2(1336, 88, 88, 168)
+
+[node name="CeilingTurret" type="CharacterBody2D" unique_id=1518455430]
+script = ExtResource("1_xifu6")
+projectile_scene = ExtResource("2_fxen7")
+fire_rate = 1.5
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1643217627]
+texture = SubResource("AtlasTexture_g2uqv")
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=7458776]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1472990440]
+position = Vector2(1.5, 531.375)
+shape = SubResource("RectangleShape2D_g2uqv")
+
+[node name="Cannon" type="Node2D" parent="." unique_id=1773512477]
+
+[node name="Sprite2D" type="Sprite2D" parent="Cannon" unique_id=981004312]
+position = Vector2(0, 100)
+texture = SubResource("AtlasTexture_kpcc8")
+
+[node name="Muzzle" type="Marker2D" parent="Cannon" unique_id=1686034594]
+position = Vector2(0, 52)
+
+[node name="Timer" type="Timer" parent="." unique_id=1308321807]
+wait_time = 1.5
+autostart = true

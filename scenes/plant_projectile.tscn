@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://cob4yptdv2kgo"]
+
+[ext_resource type="Script" uid="uid://ckpnlkkt6854w" path="res://scripts/plant_projectile.gd" id="1_3m7v4"]
+[ext_resource type="Texture2D" uid="uid://bhqcgi226al6k" path="res://assets/characters/torreta/Hoja de sprites de torreta góticaಿಷ್ಠ.png" id="2_wlt2p"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g2uqv"]
+atlas = ExtResource("2_wlt2p")
+region = Rect2(1360, 872, 32, 40)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kpcc8"]
+radius = 16.124516
+
+[node name="PlantProjectile" type="Area2D" unique_id=1454469348]
+script = ExtResource("1_3m7v4")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1016127593]
+texture = SubResource("AtlasTexture_g2uqv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1610387725]
+shape = SubResource("CircleShape2D_kpcc8")

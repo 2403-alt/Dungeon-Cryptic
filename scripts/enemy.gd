@@ -227,6 +227,8 @@ func die() -> void:
 	is_dead = true
 	killed.emit()
 	queue_free()
+	if player and player.has_method("heal_on_enemy_kill"):
+		player.heal_on_enemy_kill()
 
 func navigate_to(target: Vector2, movement_speed: float) -> void:
 	if not navigation_ready:

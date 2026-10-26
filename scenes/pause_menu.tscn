@@ -1,0 +1,141 @@
+[gd_scene format=3 uid="uid://nyglr73qiwne"]
+
+[ext_resource type="Script" uid="uid://boi1g4r2w4v6n" path="res://scripts/pause_menu.gd" id="1_n87rw"]
+[ext_resource type="Texture2D" uid="uid://gtlnha8ciolk" path="res://assets/ui/file_000000005da8820ea073145b058d4780.png" id="2_5d2l8"]
+[ext_resource type="PackedScene" uid="uid://bc7n0dlwxuo7l" path="res://scenes/save_slots.tscn" id="2_myx47"]
+[ext_resource type="Texture2D" uid="uid://dqmn7ackks65w" path="res://assets/ui/file_00000000d3dc820e8cd1a1acef23bc0d.png" id="3_7l7mv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5d2l8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v4r4p"]
+atlas = ExtResource("2_5d2l8")
+region = Rect2(84.624176, 108.33716, 659.20447, 129.92677)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1s2dm"]
+atlas = ExtResource("2_5d2l8")
+region = Rect2(907.8725, 109.061874, 661.1276, 129.65088)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_88e76"]
+atlas = ExtResource("2_5d2l8")
+region = Rect2(911.74927, 106.59096, 656.2417, 132.40935)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_knqa7"]
+atlas = ExtResource("2_5d2l8")
+region = Rect2(85.925766, 251.15744, 657.90717, 131.63547)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_71k7c"]
+atlas = ExtResource("2_5d2l8")
+region = Rect2(912.50024, 253.18431, 654.2584, 129.24098)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cmnsq"]
+atlas = ExtResource("2_5d2l8")
+region = Rect2(909.73944, 253.16833, 657.7624, 129.97754)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ofnjo"]
+atlas = ExtResource("2_5d2l8")
+region = Rect2(84.88017, 396.59335, 658.9564, 131.59415)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1rgno"]
+atlas = ExtResource("2_5d2l8")
+region = Rect2(911.7436, 396.78476, 656.0175, 132.95114)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4hnlu"]
+atlas = ExtResource("2_5d2l8")
+region = Rect2(911.84814, 396.7777, 655.56323, 133.14008)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3o3g3"]
+atlas = ExtResource("2_5d2l8")
+region = Rect2(85.01079, 542.62305, 658.9051, 130.20502)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h5b1d"]
+atlas = ExtResource("2_5d2l8")
+region = Rect2(912, 544, 656, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_avs0h"]
+atlas = ExtResource("2_5d2l8")
+region = Rect2(912, 544, 656, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ar2xs"]
+atlas = ExtResource("2_5d2l8")
+region = Rect2(88, 688, 656, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jkjer"]
+atlas = ExtResource("2_5d2l8")
+region = Rect2(912, 688, 656, 136)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5gujb"]
+atlas = ExtResource("2_5d2l8")
+region = Rect2(912, 688, 656, 136)
+
+[node name="PauseMenu" type="CanvasLayer" unique_id=544714541]
+process_mode = 3
+script = ExtResource("1_n87rw")
+
+[node name="Background" type="ColorRect" parent="." unique_id=806029280]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7019608)
+
+[node name="CenterContainer" type="CenterContainer" parent="Background" unique_id=1844230458]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 283.0
+offset_top = 209.0
+offset_right = 283.0
+offset_bottom = 258.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+
+[node name="PausePanel" type="PanelContainer" parent="Background/CenterContainer" unique_id=208800559]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_5d2l8")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/CenterContainer/PausePanel" unique_id=871709625]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="ResumeButton" type="TextureButton" parent="Background/CenterContainer/PausePanel/VBoxContainer" unique_id=533395905]
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_v4r4p")
+texture_pressed = SubResource("AtlasTexture_1s2dm")
+texture_hover = SubResource("AtlasTexture_88e76")
+
+[node name="SaveButton" type="TextureButton" parent="Background/CenterContainer/PausePanel/VBoxContainer" unique_id=878842303]
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_knqa7")
+texture_pressed = SubResource("AtlasTexture_71k7c")
+texture_hover = SubResource("AtlasTexture_cmnsq")
+
+[node name="LoadButton" type="TextureButton" parent="Background/CenterContainer/PausePanel/VBoxContainer" unique_id=1664472761]
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_ofnjo")
+texture_pressed = SubResource("AtlasTexture_1rgno")
+texture_hover = SubResource("AtlasTexture_4hnlu")
+
+[node name="RestartButton" type="TextureButton" parent="Background/CenterContainer/PausePanel/VBoxContainer" unique_id=1289836274]
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_3o3g3")
+texture_pressed = SubResource("AtlasTexture_h5b1d")
+texture_hover = SubResource("AtlasTexture_avs0h")
+
+[node name="ExitButton" type="TextureButton" parent="Background/CenterContainer/PausePanel/VBoxContainer" unique_id=1506320628]
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_ar2xs")
+texture_pressed = SubResource("AtlasTexture_jkjer")
+texture_hover = SubResource("AtlasTexture_5gujb")
+
+[node name="Sprite2D" type="Sprite2D" parent="Background" unique_id=2106918620]
+position = Vector2(577.00006, 155)
+scale = Vector2(0.26113516, 0.2)
+texture = ExtResource("3_7l7mv")
+
+[node name="SaveSlots" parent="." unique_id=2046099463 instance=ExtResource("2_myx47")]
+visible = false
