@@ -11,6 +11,7 @@ extends CharacterBody2D
 @onready var doublejump_sound: AudioStreamPlayer = $DobleJumpSound
 @onready var throw_animation: AnimatedSprite2D = $ThrowAnimation
 @onready var throw_sound: AudioStreamPlayer = $ThrowSound
+@onready var run_sound: AudioStreamPlayer = $RunSound
 
 @export var attack_damage: int = 20
 @export var attack_cooldown: float = 0.2
@@ -50,6 +51,10 @@ func _ready() -> void:
 	animation.play("idle")
 	smoke_jump.visible = false
 	attack.visible = false
+	
+	if run_sound.stream is AudioStreamWAV:
+		var run_audio := run_sound.stream as AudioStreamWAV
+		run_audio.loop_mode = AudioStreamWAV.LOOP_FORWARD
 
 	health_changed.emit(health, health_max)
 	stones_changed.emit(stones, max_stones)
@@ -106,15 +111,19 @@ func damage(amount: int = 1, ignore_invulnerability: bool = false) -> void:
 	_update_animation()
 
 
+
 func _physics_process(delta: float) -> void:
 	if defeated:
 		return
-		
+
 	if throwing_stone:
-		velocity.x = 0
+		velocity.x = 0.0
+
 		if not is_on_floor():
 			velocity += get_gravity() * delta
+
 		move_and_slide()
+		_update_run_sound()
 		return
 
 	if attack_timer > 0.0:
@@ -133,8 +142,9 @@ func _physics_process(delta: float) -> void:
 		if is_on_floor() and jumps == 0:
 			velocity.y = JUMP_VELOCITY
 			jumps += 1
-			doublejump_sound.play()
+			jump_sound.play()
 			animation.play("jump")
+
 		elif not is_on_floor() and jumps == 1:
 			velocity.y = JUMP_VELOCITY
 			jumps = 2
@@ -142,8 +152,9 @@ func _physics_process(delta: float) -> void:
 			animation.play("jump")
 			animation.frame = 0
 			smoke_jump.visible = true
-			smoke_jump.play("doble_jump")
+			smoke_jump.play("doublejump_sound")
 
+	# Movimiento horizontal: conserva la velocidad original.
 	var direction := Input.get_axis("ui_left", "ui_right")
 
 	if direction != 0:
@@ -154,11 +165,14 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("player_attack") and attack_timer <= 0.0 and not attacking:
 		_start_attack()
-	
+
 	if Input.is_action_just_pressed("throw_stone"):
 		throw_stone()
-		
+
+	# Mover al personaje una sola vez por fotograma.
 	move_and_slide()
+
+	_update_run_sound()
 	_update_animation()
 
 func _start_attack() -> void:
@@ -291,3 +305,18 @@ func add_stones(amount: int = 1) -> void:
 
 	if stones != previous_stones:
 		stones_changed.emit(stones, max_stones)
+		
+
+func _update_run_sound() -> void:
+	var should_play := (
+		is_on_floor()
+		and absf(velocity.x) > 5.0
+		and not defeated
+		and not throwing_stone
+	)
+
+	if should_play:
+		if not run_sound.playing:
+			run_sound.play()
+	elif run_sound.playing:
+		run_sound.stop()

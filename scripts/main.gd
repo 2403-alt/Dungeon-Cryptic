@@ -16,24 +16,39 @@ var active_level
 @onready var health_bar: TextureProgressBar = $HealthBar/ProgressBar
 @onready var background_sound: AudioStreamPlayer = $backgroundSound
 @onready var pause_menu = $PauseMenu
+@onready var restart_button: Button = $UI/RestartButton
+
 
 
 func _ready() -> void:
+	var restart_level_name := "Level01"
+
+	if get_tree().has_meta("restart_level_name"):
+		restart_level_name = str(
+			get_tree().get_meta("restart_level_name")
+		)
+		get_tree().remove_meta("restart_level_name")
+
 	active_level = level
-	_set_level_active(level, true)
-	_set_level_active(level_2, false)
+
+	_set_level_active(level, restart_level_name != "Level02")
+	_set_level_active(level_2, restart_level_name == "Level02")
+
+	if restart_level_name == "Level02":
+		active_level = level_2
+		player.global_position = level_2_spawn_position
+
+	restart_button.hide()
+	restart_button.pressed.connect(_on_restart_button_pressed)
 
 	score_label.text = "Point: %d" % level.score
 	win_label.visible = false
 	dead_label.visible = false
 	timer_label.hide()
-	if background_sound.stream is AudioStreamWAV:
-		var wav_stream: AudioStreamWAV = background_sound.stream as AudioStreamWAV
-		wav_stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
-	background_sound.play()
 
 	if not QuestManager.quest_updated.is_connected(_update_mission_label):
 		QuestManager.quest_updated.connect(_update_mission_label)
+
 	_update_mission_label()
 
 	health_bar.min_value = 0
@@ -47,9 +62,17 @@ func _ready() -> void:
 	level_2.score_changed.connect(_on_score_changed)
 	level_2.time_limit_reached.connect(_on_level_2_time_expired)
 	level_2.search_finished.connect(_on_level_2_search_finished)
-
+	
 	SaveManager.apply_save_data.call_deferred(player)
+	
+	if restart_level_name == "Level02":
+		level_2.time_remaining = level_2.time_limit_seconds
+		level_2.timer_running = false
+		level_2.search_completed = false
+		level_2.time_expired = false
 
+		timer_label.show()
+		level_2.start_search()
 
 func _set_level_active(level_node: Node2D, active: bool) -> void:
 	level_node.visible = active
@@ -183,9 +206,12 @@ func _on_level_2_search_finished() -> void:
 func _on_level_2_time_expired() -> void:
 	if game_over:
 		return
+
 	game_over = true
 	dead_label.text = "TIME'S UP!"
-	dead_label.visible = true
+	dead_label.show()
+	restart_button.show()
+
 	player.set_physics_process(false)
 	_update_mission_label()
 
@@ -203,11 +229,12 @@ func _on_level_winner() -> void:
 func _on_player_died() -> void:
 	if game_over:
 		return
+
 	game_over = true
 	dead_label.text = "GAME OVER"
-	dead_label.visible = true
+	dead_label.show()
+	restart_button.show()
 	print("GAME OVER")
-
 
 func _on_save_buttom_pressed() -> void:
 	pause_menu.pause_game()
@@ -217,3 +244,12 @@ func _on_save_buttom_pressed() -> void:
 func _on_load_button_pressed() -> void:
 	pause_menu.pause_game()
 	pause_menu.load_game()
+	
+func _on_restart_button_pressed() -> void:
+	var level_name := "Level01"
+	if is_instance_valid(active_level):
+		level_name = str(active_level.name)
+
+	SaveManager.pending_data.clear()
+	get_tree().set_meta("restart_level_name", level_name)
+	get_tree().reload_current_scene()

@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://ccm7g8651s4jy" path="res://level/walls/tile_map_plataform.tscn" id="1_8xrx1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8xrx1"]
-size = Vector2(186, 16)
+size = Vector2(182, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nl0db"]
 size = Vector2(186, 16)
@@ -155,12 +155,21 @@ size = Vector2(188, 16)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cwwkn"]
 size = Vector2(91, 16)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8o11c"]
+size = Vector2(105, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nhgf3"]
+size = Vector2(183.5, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0vlfm"]
+size = Vector2(469, 16)
+
 [node name="plataforms" type="StaticBody2D" unique_id=177133004]
 
 [node name="TileMapLayer" parent="." unique_id=762494646 instance=ExtResource("1_8xrx1")]
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="." unique_id=1600086658]
-position = Vector2(1640, 499)
+position = Vector2(1638, 499)
 shape = SubResource("RectangleShape2D_8xrx1")
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="." unique_id=2105282877]
@@ -370,3 +379,19 @@ shape = SubResource("RectangleShape2D_0lmpv")
 [node name="CollisionShape2D57" type="CollisionShape2D" parent="." unique_id=1925414630]
 position = Vector2(4439.5, 157)
 shape = SubResource("RectangleShape2D_cwwkn")
+
+[node name="CollisionShape2D10" type="CollisionShape2D" parent="." unique_id=1922795551]
+position = Vector2(2277.5, -1292)
+shape = SubResource("RectangleShape2D_8o11c")
+
+[node name="CollisionShape2D11" type="CollisionShape2D" parent="." unique_id=768852301]
+position = Vector2(2455, -1243)
+shape = SubResource("RectangleShape2D_nhgf3")
+
+[node name="CollisionShape2D37" type="CollisionShape2D" parent="." unique_id=1860405653]
+position = Vector2(3326, -1379)
+shape = SubResource("RectangleShape2D_0vlfm")
+
+[node name="CollisionShape2D58" type="CollisionShape2D" parent="." unique_id=1338888005]
+position = Vector2(2784.75, -1316)
+shape = SubResource("RectangleShape2D_8xrx1")

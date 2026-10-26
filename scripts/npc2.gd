@@ -35,6 +35,7 @@ func interact() -> void:
 
 	var level = get_parent()
 	if level == null or not level.has_method("get_search_progress"):
+		push_warning("NPC2: el padre no tiene get_search_progress(). Comprueba que NPC2 sea hijo directo de Level02.")
 		return
 
 	var progress: Dictionary = level.get_search_progress()
@@ -104,7 +105,12 @@ func show_timeout_dialogue() -> void:
 
 
 func _get_dialogue_ui():
-	return get_tree().current_scene.get_node_or_null("dialogue_ui")
+	var current_scene = get_tree().current_scene
+	if current_scene != null:
+		var dialogue = current_scene.get_node_or_null("dialogue_ui")
+		if dialogue != null:
+			return dialogue
+	return get_tree().root.find_child("dialogue_ui", true, false)
 
 
 func _on_body_entered(body: Node2D) -> void:

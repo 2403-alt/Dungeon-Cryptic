@@ -7,10 +7,11 @@
 [ext_resource type="PackedScene" uid="uid://b7s5so5ol66g2" path="res://scenes/dialogue_ui.tscn" id="4_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://dsfd81n3b3hcm" path="res://assets/ui/04.png" id="4_tbgi4"]
 [ext_resource type="Script" uid="uid://bcfs5npcjnavw" path="res://scripts/ui.gd" id="5_choun"]
-[ext_resource type="Texture2D" uid="uid://drqg555s3adxy" path="res://assets/bro/3 Dude_Monster/Rock2.png" id="6_ya4ey"]
+[ext_resource type="Texture2D" uid="uid://drqg555s3adxy" path="res://assets/characters/Dude/Rock2.png" id="6_ya4ey"]
 [ext_resource type="PackedScene" uid="uid://nyglr73qiwne" path="res://scenes/pause_menu.tscn" id="7_pause"]
-[ext_resource type="AudioStream" uid="uid://b84yqoq23fmpn" path="res://sounds/background2.wav" id="7_tipki"]
 [ext_resource type="PackedScene" uid="uid://b2gnf5roye73u" path="res://scenes/impact_effect.tscn" id="11_ya4ey"]
+[ext_resource type="AudioStream" uid="uid://b84yqoq23fmpn" path="res://sounds/background2.wav" id="12_music"]
+[ext_resource type="Script" uid="uid://im25sfiv3gsn" path="res://scripts/background_music.gd" id="13_music"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_g2uqv"]
 vertices = PackedVector2Array(2679.1094, 410.8203, 1875.0469, 398.17188, 1897.0391, 182, 2659.8125, 182, 3901.461, 176.95313, 3937.2734, 400.95313, 3127.9297, 398.03125, 3148.1328, 173.03906, 1370.7422, 382.96875, 597.2969, 381.02344, 604.71094, 127.88281, 1364.2422, 119.109375, 1434.5, -169.07031, 1445.4375, 38.828125, 827.4531, 29.15625, 836.5469, -173.92188, 2539.5234, 14.0078125, 1892.9219, 14.9765625, 1914.1484, -225.00781, 2528.4531, -225.97656, 1336.3438, -685.02344, 1346.6406, -393.03125, 563.2578, -395.96094, 570.7422, -686.96875, 3636.6406, -775.8906, 2843.2422, -768.10156, 2851.7578, -1121.0391, 3624.3516, -1124.9531, 4670.8984, -2013.0391, 4667.078, -1590, 7.96875, -1592.9922, 7.0234375, -2033.9531)
@@ -105,6 +106,13 @@ position = Vector2(1025, 91)
 scale = Vector2(2, 2)
 texture = ExtResource("6_ya4ey")
 
+[node name="RestartButton" type="Button" parent="UI" unique_id=343630982]
+offset_left = 530.0
+offset_top = 361.0
+offset_right = 605.0
+offset_bottom = 392.0
+text = "RESTART"
+
 [node name="HealthBar" type="CanvasLayer" parent="." unique_id=72841171]
 
 [node name="ProgressBar" type="TextureProgressBar" parent="HealthBar" unique_id=1944313179]
@@ -122,9 +130,10 @@ metadata/_edit_use_anchors_ = true
 
 [node name="dialogue_ui" parent="." unique_id=1657432286 instance=ExtResource("4_jyhfs")]
 
-[node name="backgroundSound" type="AudioStreamPlayer" parent="." unique_id=1090504067]
-stream = ExtResource("7_tipki")
+[node name="backgroundSound" type="AudioStreamPlayer" parent="." unique_id=1423542498]
+stream = ExtResource("12_music")
 autoplay = true
+script = ExtResource("13_music")
 
 [node name="PauseMenu" parent="." unique_id=1132568490 instance=ExtResource("7_pause")]
 

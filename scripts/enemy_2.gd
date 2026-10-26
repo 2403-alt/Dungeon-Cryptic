@@ -36,6 +36,7 @@ enum State {
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var detection_area: Area2D = $DetectionArea
 @onready var attack_area: Area2D = $AttackArea
+@onready var shoot_range: Area2D = $ShootRange
 @onready var navigation_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var patrol_a: Marker2D = $PositionPatrolA
 @onready var patrol_b: Marker2D = $PositionPatrolB
@@ -84,6 +85,8 @@ func _ready() -> void:
 
 	detection_area.body_entered.connect(_on_detection_body_entered)
 	detection_area.body_exited.connect(_on_detection_body_exited)
+	shoot_range.body_entered.connect(_on_shoot_range_body_entered)
+	shoot_range.body_exited.connect(_on_shoot_range_body_exited)
 
 	shoot_timer.stop()
 	shoot_timer.wait_time = maxf(shoot_cooldown, 0.1)
@@ -92,6 +95,8 @@ func _ready() -> void:
 
 	state = State.IDLE
 	idle_timer = idle_duration
+	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation("idle"):
+		sprite.play("idle")
 
 	call_deferred("_initialize_navigation")
 
@@ -308,9 +313,22 @@ func _on_detection_body_entered(body: Node2D) -> void:
 
 
 func _on_detection_body_exited(body: Node2D) -> void:
-	if body == player:
+	if body == player and not shoot_range.overlaps_body(body):
 		player = null
 		change_state(State.RETURN)
+
+
+func _on_shoot_range_body_entered(body: Node2D) -> void:
+	if body.is_in_group("player") and body is CharacterBody2D:
+		player = body as CharacterBody2D
+
+
+func _on_shoot_range_body_exited(body: Node2D) -> void:
+	if body == player and not detection_area.overlaps_body(body):
+		player = null
+		shoot_timer.stop()
+		if state == State.CHASE or state == State.ATTACK:
+			change_state(State.RETURN)
 
 
 func is_player_in_attack_range() -> bool:
@@ -365,8 +383,7 @@ func change_state(new_state: State) -> void:
 			pass
 
 
-# DISPAROS: USA EL COLLISION DE ATTACKAREA
-
+# DISPAROS: usa el área amplia ShootRange. AttackArea queda para el ataque cercano.
 func can_shoot_player() -> bool:
 	if is_dead or not is_instance_valid(player):
 		return false
@@ -374,10 +391,7 @@ func can_shoot_player() -> bool:
 	if not is_player_alive():
 		return false
 
-	if not attack_area.overlaps_body(player):
-		return false
-
-	return true
+	return shoot_range.overlaps_body(player)
 
 
 func update_shooting() -> void:
@@ -418,7 +432,7 @@ func _shoot_projectile() -> void:
 	).normalized()
 
 	get_tree().current_scene.add_child(projectile)
-	projectile.global_position = muzzle.global_position
+	projectile.global_position = muzzle.global_position + direction * 55.0
 
 	if projectile.has_method("launch"):
 		projectile.launch(direction, self, projectile_damage)

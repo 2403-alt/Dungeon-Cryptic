@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://bwtflhe5mu0yk" path="res://assets/scenery/Dungeons (2).png" id="4_ccayl"]
 [ext_resource type="PackedScene" uid="uid://ccm7g8651s4jy" path="res://level/walls/tile_map_plataform.tscn" id="5_owl6u"]
 [ext_resource type="Texture2D" uid="uid://b4kx7doxdabns" path="res://assets/scenery/Mazmorra infernal pixelada en rojo.png" id="6_ikbui"]
-[ext_resource type="Texture2D" uid="uid://c5tik45px2anr" path="res://assets/scenery/Catálogo pixel art de puertas de mazmorra.png" id="7_vqvml"]
-[ext_resource type="PackedScene" uid="uid://dclcfm4gyoobp" path="res://level/walls/plataforms.tscn" id="8_xo5qq"]
+[ext_resource type="Texture2D" uid="uid://c5tik45px2anr" path="res://assets/scenery/Cat¯logo pixel art de puertas de mazmorra.png" id="7_vqvml"]
+[ext_resource type="PackedScene" uid="uid://dclcfm4gyoobp" path="res://scenes/plataforms.tscn" id="8_xo5qq"]
 [ext_resource type="PackedScene" uid="uid://cti6si0obxsrj" path="res://scenes/enemy_2.tscn" id="9_ev6m5"]
 [ext_resource type="PackedScene" uid="uid://fpb1ftm2m6u4" path="res://scenes/orbe.tscn" id="10_jm0yl"]
 [ext_resource type="PackedScene" path="res://scenes/npc2.tscn" id="11_npc2"]
@@ -15919,7 +15919,6 @@ sources/4 = SubResource("TileSetAtlasSource_37jkp")
 
 [node name="Level02" type="Node2D" unique_id=53777808]
 script = ExtResource("1_u2tna")
-time_limit_seconds = 180.0
 
 [node name="Wall" parent="." unique_id=1159306296 instance=ExtResource("3_jm0yl")]
 
@@ -15963,11 +15962,7 @@ position = Vector2(360, -1803)
 scale = Vector2(1.5, 1.5)
 
 [node name="enemy13" parent="Node2D" unique_id=1329525142 instance=ExtResource("9_ev6m5")]
-position = Vector2(243, -1404)
-scale = Vector2(1.5, 1.5)
-
-[node name="enemy14" parent="Node2D" unique_id=239247630 instance=ExtResource("9_ev6m5")]
-position = Vector2(-166, -1392)
+position = Vector2(-220, -1370)
 scale = Vector2(1.5, 1.5)
 
 [node name="enemy15" parent="Node2D" unique_id=287708652 instance=ExtResource("9_ev6m5")]
@@ -15976,10 +15971,6 @@ scale = Vector2(1.5, 1.5)
 
 [node name="enemy16" parent="Node2D" unique_id=2139932531 instance=ExtResource("9_ev6m5")]
 position = Vector2(345, -34)
-scale = Vector2(1.5, 1.5)
-
-[node name="enemy17" parent="Node2D" unique_id=1383754631 instance=ExtResource("9_ev6m5")]
-position = Vector2(2634, -1216)
 scale = Vector2(1.5, 1.5)
 
 [node name="enemy18" parent="Node2D" unique_id=233638393 instance=ExtResource("9_ev6m5")]
@@ -16004,14 +15995,6 @@ scale = Vector2(1.5, 1.5)
 
 [node name="enemy6" parent="Node2D" unique_id=499683662 instance=ExtResource("9_ev6m5")]
 position = Vector2(419, 262)
-scale = Vector2(1.5, 1.5)
-
-[node name="enemy7" parent="Node2D" unique_id=465570170 instance=ExtResource("9_ev6m5")]
-position = Vector2(1044, -11)
-scale = Vector2(1.5, 1.5)
-
-[node name="enemy8" parent="Node2D" unique_id=1703988028 instance=ExtResource("9_ev6m5")]
-position = Vector2(351, -819)
 scale = Vector2(1.5, 1.5)
 
 [node name="enemy9" parent="Node2D" unique_id=1459139977 instance=ExtResource("9_ev6m5")]

@@ -274,3 +274,14 @@ func apply_save_data(data: Dictionary) -> void:
 
 func _on_quest_completed() -> void:
 	winner.emit()
+
+
+func get_search_progress() -> Dictionary:
+	return {
+		"collected": collected_orb_ids.size(),
+		"required": required_search_items,
+		"time_remaining": time_remaining,
+		"timer_running": timer_running,
+		"completed": search_completed,
+		"time_expired": time_expired
+	}

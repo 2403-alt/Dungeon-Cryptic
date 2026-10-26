@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://o7q5fd8yg2ci" path="res://scripts/ceiling_turret.gd" id="1_xifu6"]
 [ext_resource type="PackedScene" uid="uid://dvoahoitr8a6e" path="res://scenes/turret_projectile.tscn" id="2_fxen7"]
-[ext_resource type="Texture2D" uid="uid://bw4djbgbgc2fr" path="res://assets/characters/torreta/Guía pixel art_ torreta modular en Godot.png" id="3_0jtas"]
+[ext_resource type="Texture2D" uid="uid://bw4djbgbgc2fr" path="res://assets/characters/torreta/GuÝa pixel art_ torreta modular en Godot.png" id="3_0jtas"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2uqv"]
 atlas = ExtResource("3_0jtas")
@@ -39,5 +39,5 @@ texture = SubResource("AtlasTexture_kpcc8")
 position = Vector2(0, 52)
 
 [node name="Timer" type="Timer" parent="." unique_id=1308321807]
-wait_time = 1.5
+wait_time = 0.5
 autostart = true
